@@ -1,27 +1,24 @@
 #include "Bank.hpp"
 
-// Account class implementation
 Account::Account(int id, double initialBalance) : accountID(id), balance(initialBalance) {}
 
 int Account::getAccountID() const {
     return accountID;
 }
 
-double Account::getBalance() const {  // C++98 does not require return by reference here
+double Account::getBalance() const {  
     return balance;
 }
 
-// Bank class implementation
 Bank::Bank(double initialFunds) : bankFunds(initialFunds) {}
 
 Account* Bank::findAccount(int accountID) {
-    // Use iterators instead of range-based for loops
     for (std::vector<Account>::iterator it = accounts.begin(); it != accounts.end(); ++it) {
         if (it->getAccountID() == accountID) {
             return &(*it);
         }
     }
-    return NULL;  // Use NULL instead of nullptr in C++98
+    return NULL;  
 }
 
 void Bank::createAccount(int id, double initialBalance) {
@@ -36,7 +33,7 @@ void Bank::deposit(int accountID, double amount) {
     Account* acc = findAccount(accountID);
     if (acc != NULL) {
         double fee = amount * 0.05;
-        acc->getBalance() += (amount - fee);  // Private member access - use a setter if necessary
+        acc->getBalance() += (amount - fee);  
         bankFunds += fee;
     } else {
         throw std::invalid_argument("Account not found.");
@@ -47,7 +44,7 @@ void Bank::withdraw(int accountID, double amount) {
     Account* acc = findAccount(accountID);
     if (acc != NULL) {
         if (acc->getBalance() >= amount) {
-            acc->setBalance(acc->getBalance() - amount);  // Use a setter method to modify the balance
+            acc->setBalance(acc->getBalance() - amount);  
         } else {
             throw std::invalid_argument("Insufficient funds.");
         }
@@ -59,7 +56,7 @@ void Bank::withdraw(int accountID, double amount) {
 void Bank::giveLoan(int accountID, double loanAmount) {
     Account* acc = findAccount(accountID);
     if (acc != NULL && bankFunds >= loanAmount) {
-        acc->getBalance() += loanAmount;  // Private member access - use a setter if necessary
+        acc->getBalance() += loanAmount;  
         bankFunds -= loanAmount;
     } else {
         throw std::invalid_argument("Insufficient bank funds or account not found.");
